@@ -107,7 +107,6 @@ void loop()
 //  Serial.print(millis());
 //  Serial.print(",");
   //Serial.println(c2);
-  digitalWrite(FET2, HIGH);
     
   if (sp <= c2 && sp < 19) // If the temperature is higher than the setpoint Heat extraction ON and Peltier ON
   {
@@ -154,14 +153,13 @@ void loop()
       c = thermocouple.readCelsius();
       c2 = thermocouple2.readCelsius();
       OLED_display();
-      heat(15);
+      heat(24);//23-25 is the safe zone
 //      Serial.print("DATA,TIME,");
 //      Serial.print(millis());
 //      Serial.print(",");
       //Serial.println(c2);
   }
-  else
-  { digitalWrite(FET2, HIGH);}
+
 
 }
 
