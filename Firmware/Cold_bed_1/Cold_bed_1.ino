@@ -106,9 +106,10 @@ void loop()
 //  Serial.print("DATA,TIME,");
 //  Serial.print(millis());
 //  Serial.print(",");
-  Serial.println(c2);
-  
-  if (sp <= c2 && sp < 19)
+  //Serial.println(c2);
+  digitalWrite(FET2, HIGH);
+    
+  if (sp <= c2 && sp < 19) // If the temperature is higher than the setpoint Heat extraction ON and Peltier ON
   {
       sp = knob.read()*0.125;
       c = thermocouple.readCelsius();
@@ -118,20 +119,20 @@ void loop()
 //      Serial.print("DATA,TIME,");
 //      Serial.print(millis());
 //      Serial.print(",");
-      Serial.println(c2);
+      //Serial.println(c2);
   }
 
-  if (sp > c2 && sp < 19)
+  if (sp > c2 && sp < 19) // If the temperature is lower than the setpoint Heat extraction ON and Peltier OFF
   {
       sp = knob.read()*0.125;
       c = thermocouple.readCelsius();
       c2 = thermocouple2.readCelsius();
       OLED_display();
-      do_nothing();
+      stop_cooling();
 //      Serial.print("DATA,TIME,");
 //      Serial.print(millis());
 //      Serial.print(",");
-      Serial.println(c2);
+      //Serial.println(c2);
   }
 
   if (sp <= c2 && sp > 19)
@@ -140,11 +141,11 @@ void loop()
       c = thermocouple.readCelsius();
       c2 = thermocouple2.readCelsius();
       OLED_display();
-      do_nothing2();
+      stop_heating();
 //      Serial.print("DATA,TIME,");
 //      Serial.print(millis());
 //      Serial.print(",");
-      Serial.println(c2);
+      //Serial.println(c2);
   }
   
   if (sp > c2 && sp > 19)
@@ -157,8 +158,10 @@ void loop()
 //      Serial.print("DATA,TIME,");
 //      Serial.print(millis());
 //      Serial.print(",");
-      Serial.println(c2);
+      //Serial.println(c2);
   }
+  else
+  { digitalWrite(FET2, HIGH);}
 
 }
 
@@ -192,15 +195,8 @@ void OLED_display()
     display.display(); 
 }
 
-
-
-
 void cool()
 {
-//  digitalWrite(DIR, LOW);
-//  digitalWrite(PWM, HIGH);
-//  //analogWrite(PWM, k);
-
     digitalWrite(FET, HIGH);
     digitalWrite(FET2, HIGH);
 }
@@ -211,15 +207,14 @@ void heat(int k)
   digitalWrite(FET2, LOW);
 }
 
-void do_nothing()
+void stop_cooling()
 {
     digitalWrite(FET, LOW);
     digitalWrite(FET2, HIGH);
 }
 
-void do_nothing2()
+void stop_heating()
 {
-    //digitalWrite(FET, LOW);
     analogWrite(FET, 0);
     digitalWrite(FET2, LOW);
 }
